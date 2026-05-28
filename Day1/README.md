@@ -246,9 +246,84 @@ Different gate flavors are optimized for:
 
 During synthesis, tools like **Yosys** select the most suitable gate flavor based on timing, power, and area requirements.
 
+# Synthesis Lab with Yosys
+
+Let’s synthesize the `good_mux` design using Yosys!
+
+---
+
+# Step-by-Step Yosys Flow
+
+## Start Yosys
+
+```bash
+yosys
+```
+
+---
+
+## Read the liberty library
+
+```bash
+read_liberty -lib lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+```
+
+---
+
+## Read the Verilog code
+
+```bash
+read_verilog verilog_files/good_mux.v
+```
+
+---
+
+## Synthesize the design
+
+```bash
+synth -top good_mux
+```
+
+---
+
+## Technology mapping
+
+```bash
+abc -liberty lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+```
+
+---
+
+## Generate synthesized netlist
+
+```bash
+write_verilog good_mux_netlist.v
+```
+
+---
+
+## Visualize the gate-level netlist
+
+```bash
+show
+```
+
+---
+
+
+
+
+
+
+
+# Netlist output
+
+<img width="1920" height="922" alt="good_mux netlist" src="https://github.com/user-attachments/assets/416b71fe-818e-48e2-9a36-94c2c076684a" />
+
+
+---
+
 
 # Conclusion
 
-Day 1 introduced the basic RTL design and simulation flow using Verilog HDL. The lab covered Verilog design implementation, testbench creation, simulation using Icarus Verilog, and waveform analysis using GTKWave.
-
-The session also provided an introduction to Yosys synthesis flow and standard cell libraries used in digital VLSI design. Through the multiplexer example, the complete flow from RTL design to simulation and synthesis was understood successfully.
+In Day 1 of the RTL Design and Synthesis workshop, the complete RTL-to-synthesis flow was successfully implemented using open-source EDA tools. The `good_mux` Verilog design was simulated using Icarus Verilog, and the waveform outputs were analyzed using GTKWave. The RTL design was then synthesized using Yosys with the SKY130 standard cell library. Technology mapping, gate-level netlist generation, and schematic visualization were completed successfully. This lab provided practical exposure to RTL simulation, synthesis flow, and open-source VLSI design methodologies.

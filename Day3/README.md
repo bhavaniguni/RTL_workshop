@@ -262,7 +262,7 @@ y = a XNOR c
   <img width="1920" height="922" alt="opt_check4_lab2" src="https://github.com/user-attachments/assets/ec2f884f-be19-47da-bae7-149281111c87" />
 
 # Lab 5
-# Lab: Constant Propagation Optimization using Multiple Modules
+# Constant Propagation Optimization using Multiple Modules
 
 This lab demonstrates how synthesis tools optimize logic by propagating constant values through module hierarchies.
 
@@ -468,12 +468,135 @@ assign q = 1'b1;
 
 
 # Lab 8
+ ## Outputs
+ ## dff_const3 (Simulation & Synthesis)
+
+ <img width="1920" height="922" alt="gtkwave dff_const3" src="https://github.com/user-attachments/assets/6f72749a-ecc8-404e-b0fe-c937dcdb9e6c" />
+
+---
+ <img width="1920" height="922" alt="dff_const3_netlist" src="https://github.com/user-attachments/assets/8e7a25b2-7572-4e39-a6cf-0387928fbd3f" />
+
+## dff_const4 (Simulation & Synthesis)
 
 
-# Summary
+<img width="1920" height="922" alt="gtkwave dff_const4" src="https://github.com/user-attachments/assets/92491ba3-2855-4d18-8cc8-5920c5cead51" />
 
-Day 3 introduced important optimization techniques used in RTL synthesis.
+---
 
+<img width="1920" height="922" alt="dff_const4 netlist" src="https://github.com/user-attachments/assets/1bcc60c2-7a18-4957-9cf6-81dd23d43bcb" />
+
+
+
+## dff_const5 (Simulation & Synthesis)
+ 
+ <img width="1920" height="922" alt="gtkwave dff_const5" src="https://github.com/user-attachments/assets/5cc1e8b4-f8b5-4edb-b871-06cbaecab8da" />
+
+---
+
+<img width="1920" height="922" alt="dff_const5 netlist" src="https://github.com/user-attachments/assets/c6f68ef3-20e3-449f-a448-f62d1a9cc62d" />
+
+
+# Unused Output Optimisation
+
+
+In this example, a **3-bit counter** is implemented, but only the **LSB (`count[0]`)** is connected to the output `q`. The higher bits (`count[1]` and `count[2]`) are never used.
+
+### Verilog Code
+
+```verilog
+module counter_opt (
+    input clk,
+    input reset,
+    output q
+);
+
+reg [2:0] count;
+
+assign q = count[0];
+
+always @(posedge clk, posedge reset)
+begin
+    if (reset)
+        count <= 3'b000;
+    else
+        count <= count + 1;
+end
+
+endmodule
+```
+
+---
+
+### Circuit Representation
+
+```
+                 Reset
+                   |
+                   |
+          +----------------+
+          |   3-bit Up     |
+CLK ----> |    Counter     |
+          |                |
+          +----------------+
+                  |
+             count[2:0]
+                  |
+      +-----------+-----------+
+      |           |           |
+   count[2]    count[1]    count[0]
+   (unused)    (unused)       |
+                              |
+                              v
+                              q
+```
+
+---
+
+### Optimization Concept
+
+Only `count[0]` affects the output `q`.
+
+| Counter Bit | Used? |
+|-------------|--------|
+| count[0]    | ✅ Yes |
+| count[1]    | ❌ No |
+| count[2]    | ❌ No |
+
+Since `count[1]` and `count[2]` do not contribute to any output, a synthesis tool can remove the unnecessary logic and optimize the design.
+
+---
+
+### What the Synthesizer Does
+
+Original hardware:
+
+- 3 Flip-Flops (`count[2:0]`)
+- 3-bit incrementer
+
+Optimized hardware:
+
+- Only 1 Flip-Flop (`count[0]`)
+- Toggle logic for `count[0]`
+
+
+
+Unused Output Optimization removes logic that does not affect any primary output. Since only `count[0]` is observed, the synthesis tool eliminates the unused bits (`count[1]` and `count[2]`), reducing area and improving efficiency.
+
+<img width="1920" height="922" alt="counter_opt_netlist" src="https://github.com/user-attachments/assets/3004682e-050e-42e2-8f70-3dd7414fe8b7" />
+
+
+# Conclusion
+
+By the end of Day 3, we gained practical experience in:
+
+Understanding synthesis optimization techniques.
+Comparing pre- and post-optimization circuit structures.
+Analyzing timing and logic improvements.
+Using industry-standard open-source EDA tools to validate optimization results.
+
+Optimization is a crucial step in the VLSI design flow, as it directly influences the speed, area, and power efficiency of digital circuits. The concepts learned today provide a strong foundation for designing high-performance and resource-efficient hardware systems.
+
+ Optimization transforms a functionally correct design into an efficient hardware implementation by intelligently reducing logic, improving timing, and utilizing resources effectively.
 
 
 

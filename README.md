@@ -25,6 +25,13 @@ This repository contains day-wise notes, RTL codes, simulation results, synthesi
 - **Day 4:** Gate-Level Simulation (GLS), Blocking vs Non-Blocking Assignments, and Synthesis-Simulation Mismatch
 - **Day 5:** Optimization in Synthesis
 
+  Each day’s README includes:
+
+   - Clear explanations of the day’s concepts
+   - Step-by-step practical labs with code and screenshots
+   - Tips and best practices for RTL design
+
+
 ## 🛠️ Tools Used
 
 - Icarus Verilog (iverilog)
